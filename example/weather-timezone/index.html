@@ -85,7 +85,7 @@
     </div>
   </div>
 
-  <div id="clock">UTC 00:00:00</div>
+  <div id="clock"></div>
   <div id="tooltip"></div>
 
   <script type="module">
@@ -317,13 +317,28 @@
           globeMat.uniforms.rotation.value.set(lng, lat),
         );
 
+      // Resolve the user's local IANA timezone once (falls back to UTC label)
+      const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      const localTzFmt = new Intl.DateTimeFormat("en-GB", {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: false,
+        timeZone: localTz,
+      });
+      // Derive a short UTC-offset label, e.g. "UTC+2" or "UTC-5"
+      const localOffsetMin = -new Date().getTimezoneOffset();
+      const localOffsetSign = localOffsetMin >= 0 ? "+" : "-";
+      const localOffsetAbs = Math.abs(localOffsetMin);
+      const localOffsetLabel =
+        localOffsetAbs % 60 === 0
+          ? `UTC${localOffsetSign}${localOffsetAbs / 60}`
+          : `UTC${localOffsetSign}${String(Math.floor(localOffsetAbs / 60)).padStart(2, "0")}:${String(localOffsetAbs % 60).padStart(2, "0")}`;
+
       (function animate() {
         dt = Date.now();
-        const now = new Date(dt);
-        const hh = String(now.getUTCHours()).padStart(2, "0");
-        const mm = String(now.getUTCMinutes()).padStart(2, "0");
-        const ss = String(now.getUTCSeconds()).padStart(2, "0");
-        clockEl.textContent = `UTC ${hh}:${mm}:${ss}`;
+        const timeStr = localTzFmt.format(new Date(dt));
+        clockEl.textContent = `${localOffsetLabel} ${timeStr}`;
         globeMat.uniforms.sunPos.value.set(...sunPosAt(dt));
         requestAnimationFrame(animate);
       })();
@@ -353,10 +368,10 @@
         countriesData = data.features;
         world
           .polygonsData(countriesData)
-          .polygonAltitude(0.001)
+          .polygonAltitude(0.004)
           .polygonCapColor(() => "rgba(0,0,0,0)")
-          .polygonSideColor(() => "rgba(255,255,255,0.04)")
-          .polygonStrokeColor(() => "rgba(180,180,255,0.5)")
+          .polygonSideColor(() => "rgba(50,120,220,0.7)")
+          .polygonStrokeColor(() => "rgba(50,120,220,0.7)")
           .onPolygonHover((polygon) => {
             if (!polygon) {
               tooltipEl.style.display = "none";
@@ -376,7 +391,10 @@
               `≈ UTC${sign}${utcOffset}<br>` +
               `~${hh}:${mm} local`;
             tooltipEl.style.display = "block";
-          });
+          })
+          .onPolygonClick((_polygon, _ev, { lat, lng }) =>
+            handleMapTap(lat, lng),
+          );
       });
 
     // ── HTML elements helper ───────────────────────────────────────────────────
@@ -556,41 +574,48 @@
       }
     }
 
-    // ── Click-to-weather ───────────────────────────────────────────────────────
-    // Debounce: ignore the click if a second click follows within 300ms
-    // (that's a double-click / double-tap used for zoom — don't treat it as a lookup)
+    // ── Double-click-to-weather ────────────────────────────────────────────────
+    // Fires only on the second tap within 450ms (double-click / double-tap).
+    // NOTE: onPolygonClick also forwards here because country polygon meshes sit
+    // slightly above the globe surface and intercept the raycaster over all land.
     let clickTimer = null;
-    world.onGlobeClick(({ lat, lng }) => {
+    let firstTapCoords = null;
+    function handleMapTap(lat, lng) {
       if (clickTimer) {
+        // Second tap — this is the double-click, proceed with lookup
         clearTimeout(clickTimer);
         clickTimer = null;
-        return; // second tap of a double-tap — abort
-      }
-      clickTimer = setTimeout(async () => {
-        clickTimer = null;
+        firstTapCoords = null;
         weatherCard.style.display = "none";
         weatherErr.style.display = "none";
-
-        try {
-          const res = await fetch(
-            `https://api.openweathermap.org/data/2.5/weather?lat=${lat.toFixed(4)}&lon=${lng.toFixed(4)}&appid=${OWM_KEY}&units=metric`,
-          );
-          const data = await res.json();
-
-          if (!res.ok) {
-            weatherErr.textContent =
-              data.message || "No data for this location.";
+        (async () => {
+          try {
+            const res = await fetch(
+              `https://api.openweathermap.org/data/2.5/weather?lat=${lat.toFixed(4)}&lon=${lng.toFixed(4)}&appid=${OWM_KEY}&units=metric`,
+            );
+            const data = await res.json();
+            if (!res.ok) {
+              weatherErr.textContent =
+                data.message || "No data for this location.";
+              weatherErr.style.display = "block";
+              return;
+            }
+            showWeatherCard(data, true);
+          } catch {
+            weatherErr.textContent = "Network error — check connection.";
             weatherErr.style.display = "block";
-            return;
           }
-
-          showWeatherCard(data, false);
-        } catch {
-          weatherErr.textContent = "Network error — check connection.";
-          weatherErr.style.display = "block";
-        }
-      }, 300);
-    });
+        })();
+        return;
+      }
+      // First tap — wait to see if a second tap follows
+      firstTapCoords = { lat, lng };
+      clickTimer = setTimeout(() => {
+        clickTimer = null;
+        firstTapCoords = null;
+      }, 450);
+    }
+    world.onGlobeClick(({ lat, lng }) => handleMapTap(lat, lng));
 
     searchBtn.addEventListener("click", searchCity);
     searchInput.addEventListener("keydown", (e) => {

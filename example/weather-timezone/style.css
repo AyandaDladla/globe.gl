@@ -21,6 +21,7 @@ body {
   user-select: none;
   max-width: calc(100vw - 24px);
   box-sizing: border-box;
+  touch-action: auto; /* allow browser to handle pinch/scroll on the panel */
 }
 #controls-header {
   display: flex;
@@ -66,6 +67,7 @@ body {
   font-size: 13px;
   padding: 8px 14px;
   border-radius: 8px;
+  touch-action: auto;
 }
 
 /* ── Country hover tooltip ────────────────────────────────────────────────── */
@@ -160,6 +162,7 @@ body {
   font-size: 13px;
   z-index: 100;
   box-sizing: border-box;
+  touch-action: auto; /* allow browser to handle pinch/scroll on the panel */
 }
 
 #search-input-wrap {
@@ -179,7 +182,7 @@ body {
   border-radius: 6px;
   padding: 7px 10px;
   font-family: monospace;
-  font-size: 13px;
+  font-size: 16px; /* ≥16px prevents iOS Safari from auto-zooming on focus */
   outline: none;
 }
 #search-input::placeholder {
@@ -317,7 +320,6 @@ body {
 
   /* Bigger search input and button for touch */
   #search-input {
-    font-size: 16px; /* prevents iOS zoom-on-focus */
     padding: 9px 10px;
   }
   #search-btn {
