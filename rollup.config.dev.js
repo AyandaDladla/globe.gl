@@ -10,7 +10,7 @@ config.plugins = [
     ...config.plugins,
     serve({
         open: true,
-        openPage: '/example/weather-timezone/',
+        openPage: '/Weather%20App/weather-timezone/',
         contentBase: '.',
         port: 3000
     }),

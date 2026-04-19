@@ -1,0 +1,460 @@
+/* ── Base ──────────────────────────────────────────────────────────────────── */
+body {
+  margin: 0;
+  background: #000;
+  overflow: hidden;
+  touch-action: none; /* let globe.gl handle all touch gestures */
+}
+
+/* ── Controls panel ───────────────────────────────────────────────────────── */
+#controls {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(0, 0, 0, 0.75);
+  color: #ddd;
+  font-family: monospace;
+  font-size: 13px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  line-height: 2;
+  user-select: none;
+  max-width: calc(100vw - 24px);
+  box-sizing: border-box;
+  touch-action: auto; /* allow browser to handle pinch/scroll on the panel */
+}
+#controls-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+#controls-toggle {
+  display: none; /* shown only on mobile via media query */
+  background: none;
+  border: none;
+  color: #aaa;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 0 2px;
+  line-height: 1;
+}
+#controls-body {
+  /* visible by default on desktop */
+}
+#controls.collapsed #controls-body {
+  display: none;
+}
+#controls label {
+  cursor: pointer;
+}
+#controls select {
+  background: #222;
+  color: #ddd;
+  border: 1px solid #555;
+  border-radius: 4px;
+  padding: 1px 4px;
+}
+
+/* ── Clock ────────────────────────────────────────────────────────────────── */
+#clock {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  background: rgba(0, 0, 0, 0.65);
+  color: lightblue;
+  font-family: monospace;
+  font-size: 13px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  touch-action: auto;
+}
+
+/* ── Country hover tooltip ────────────────────────────────────────────────── */
+#tooltip {
+  position: fixed;
+  display: none;
+  background: rgba(10, 10, 30, 0.9);
+  color: #eee;
+  font-family: monospace;
+  font-size: 12px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  pointer-events: none;
+  border: 1px solid #444;
+  line-height: 1.6;
+  z-index: 999;
+}
+
+/* ── City clock labels ────────────────────────────────────────────────────── */
+.city-label {
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  font-family: monospace;
+  font-size: 11px;
+  padding: 2px 5px;
+  border-radius: 3px;
+  white-space: nowrap;
+  pointer-events: auto;
+  opacity: 0.75;
+  transition: opacity 1s ease;
+  cursor: pointer;
+}
+.city-label:hover {
+  opacity: 1;
+}
+
+/* ── Search-result pin (non-listed cities) ────────────────────────────────── */
+.search-pin {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+}
+.search-pin-dot {
+  width: 11px;
+  height: 11px;
+  background: #ff5f5f;
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 3px rgba(255, 95, 95, 0.35),
+    0 0 10px 4px rgba(255, 95, 95, 0.5);
+  animation: pinPulse 1.6s ease-in-out infinite;
+}
+@keyframes pinPulse {
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 3px rgba(255, 95, 95, 0.35),
+      0 0 10px 4px rgba(255, 95, 95, 0.5);
+  }
+  50% {
+    box-shadow:
+      0 0 0 6px rgba(255, 95, 95, 0.15),
+      0 0 18px 8px rgba(255, 95, 95, 0.3);
+  }
+}
+.search-pin-label {
+  background: rgba(0, 0, 0, 0.72);
+  color: #ffe0e0;
+  font-family: monospace;
+  font-size: 11px;
+  padding: 2px 6px;
+  border-radius: 3px;
+  margin-top: 4px;
+  white-space: nowrap;
+  animation: pinLabelFade 5s forwards;
+}
+@keyframes pinLabelFade {
+  0% {
+    opacity: 1;
+  }
+  65% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* ── Search panel ─────────────────────────────────────────────────────────── */
+#search-panel {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  width: 260px;
+  max-width: calc(100vw - 24px);
+  font-family: monospace;
+  font-size: 13px;
+  z-index: 100;
+  box-sizing: border-box;
+  touch-action: auto; /* allow browser to handle pinch/scroll on the panel */
+}
+
+#search-input-wrap {
+  position: relative;
+}
+
+#search-row {
+  display: flex;
+  gap: 6px;
+}
+
+#search-input {
+  flex: 1;
+  background: rgba(0, 0, 0, 0.75);
+  color: #eee;
+  border: 1px solid #555;
+  border-radius: 6px;
+  padding: 7px 10px;
+  font-family: monospace;
+  font-size: 16px; /* ≥16px prevents iOS Safari from auto-zooming on focus */
+  outline: none;
+}
+#search-input::placeholder {
+  color: #777;
+}
+#search-input:focus {
+  border-color: #88aaff;
+}
+
+#search-btn {
+  background: rgba(60, 90, 180, 0.85);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 7px 12px;
+  cursor: pointer;
+  font-family: monospace;
+  font-size: 13px;
+}
+#search-btn:hover {
+  background: rgba(80, 120, 220, 0.95);
+}
+
+/* ── Predictive suggestions dropdown ─────────────────────────────────────── */
+#suggestions {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background: rgba(10, 10, 30, 0.97);
+  border: 1px solid #444;
+  border-top: none;
+  border-radius: 0 0 6px 6px;
+  overflow: hidden;
+  z-index: 200;
+  box-sizing: border-box;
+}
+.suggestion-item {
+  padding: 7px 10px;
+  cursor: pointer;
+  color: #ccc;
+  font-size: 12px;
+  border-bottom: 1px solid #1e1e2e;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.suggestion-item:last-child {
+  border-bottom: none;
+}
+.suggestion-item:hover,
+.suggestion-item.active {
+  background: rgba(80, 120, 220, 0.4);
+  color: #fff;
+}
+
+/* ── Weather card ─────────────────────────────────────────────────────────── */
+#weather-card {
+  display: none;
+  margin-top: 8px;
+  background: rgba(10, 10, 30, 0.88);
+  border: 1px solid #444;
+  border-radius: 8px;
+  padding: 12px 14px;
+  color: #eee;
+  line-height: 1.8;
+}
+#weather-card .wc-city {
+  font-size: 15px;
+  font-weight: bold;
+  color: #acd;
+  margin-bottom: 4px;
+}
+#weather-card .wc-desc {
+  color: #aaa;
+  text-transform: capitalize;
+  margin-bottom: 6px;
+}
+#weather-card .wc-row {
+  display: flex;
+  justify-content: space-between;
+  color: #ccc;
+  font-size: 12px;
+}
+#weather-card .wc-label {
+  color: #888;
+}
+
+/* ── 5-day forecast button ────────────────────────────────────────────────── */
+#forecast-btn {
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+  background: rgba(50, 80, 160, 0.6);
+  color: #cde;
+  border: 1px solid #446;
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-family: monospace;
+  font-size: 12px;
+  cursor: pointer;
+  text-align: center;
+}
+#forecast-btn:hover {
+  background: rgba(70, 110, 200, 0.8);
+  color: #fff;
+}
+
+/* ── 5-day forecast panel ─────────────────────────────────────────────────── */
+#forecast-panel {
+  display: none;
+  margin-top: 6px;
+  background: rgba(10, 10, 30, 0.88);
+  border: 1px solid #444;
+  border-radius: 8px;
+  padding: 10px 12px;
+  color: #eee;
+  font-family: monospace;
+  font-size: 12px;
+}
+.fc-day {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 0;
+  border-bottom: 1px solid #222;
+}
+.fc-day:last-child {
+  border-bottom: none;
+}
+.fc-dow {
+  color: #acd;
+  font-weight: bold;
+  width: 36px;
+  flex-shrink: 0;
+}
+.fc-desc {
+  flex: 1;
+  color: #aaa;
+  text-transform: capitalize;
+  padding: 0 8px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.fc-temps {
+  color: #ccc;
+  white-space: nowrap;
+}
+.fc-temps .fc-hi {
+  color: #f8c;
+}
+.fc-temps .fc-lo {
+  color: #8cf;
+}
+
+/* ── Weather error ────────────────────────────────────────────────────────── */
+#weather-error {
+  display: none;
+  margin-top: 6px;
+  color: #f88;
+  font-size: 12px;
+  padding-left: 2px;
+}
+
+/* ── Mobile (≤ 600px) ─────────────────────────────────────────────────────── */
+@media (max-width: 600px) {
+  /* Show the hamburger toggle */
+  #controls-toggle {
+    display: inline-block;
+  }
+
+  /* Controls: start collapsed on mobile */
+  #controls {
+    top: 8px;
+    right: 8px;
+    padding: 8px 12px;
+    font-size: 12px;
+    line-height: 1.8;
+  }
+  #controls.collapsed #controls-body {
+    display: none;
+  }
+
+  /* Bigger touch targets for checkboxes and selects */
+  #controls input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    vertical-align: middle;
+  }
+  #controls select {
+    font-size: 13px;
+    padding: 4px 6px;
+  }
+
+  /* Search panel: move to bottom, full width, card opens upward */
+  #search-panel {
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    max-width: 100%;
+    padding: 0 8px 8px;
+    display: flex;
+    flex-direction: column-reverse; /* search row at bottom, card above */
+  }
+
+  /* Suggestions dropdown opens upward on mobile */
+  #suggestions {
+    top: auto;
+    bottom: 100%;
+    border-top: 1px solid #444;
+    border-bottom: none;
+    border-radius: 6px 6px 0 0;
+  }
+
+  /* Weather card and error sit above the input row */
+  #weather-card {
+    margin-top: 0;
+    margin-bottom: 6px;
+  }
+  #weather-error {
+    margin-top: 0;
+    margin-bottom: 4px;
+  }
+
+  /* Bigger search input and button for touch */
+  #search-input {
+    padding: 9px 10px;
+  }
+  #search-btn {
+    font-size: 14px;
+    padding: 9px 14px;
+    min-width: 44px;
+  }
+
+  /* Weather card: cap height and scroll if needed */
+  #weather-card {
+    max-height: 40vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Forecast panel: cap height on mobile */
+  #forecast-panel {
+    max-height: 30vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Clock: hide on mobile — search panel is at bottom, controls top-right;
+     local time is already visible in the weather card */
+  #clock {
+    display: none;
+  }
+
+  /* Suggestion items: larger tap target */
+  .suggestion-item {
+    padding: 11px 10px;
+    font-size: 13px;
+  }
+
+  /* Hide country tooltip on touch (no hover) */
+  #tooltip {
+    display: none !important;
+  }
+}

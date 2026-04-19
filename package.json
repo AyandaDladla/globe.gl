@@ -45,7 +45,7 @@
   },
   "files": [
     "dist/**/*",
-    "example/**/*"
+    "Weather App/**/*"
   ],
   "dependencies": {
     "@tweenjs/tween.js": "18 - 25",

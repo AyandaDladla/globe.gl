@@ -2,7 +2,7 @@
 
 An interactive 3D globe built with [globe.gl](https://github.com/vasturiano/globe.gl) and [Three.js](https://threejs.org/), featuring live weather overlays, day/night shading, city clocks, and a click-to-weather lookup.
 
-**[Live Demo →](https://AyandaDladla.github.io/globe.gl/example/weather-timezone/)**
+**[Live Demo →](https://AyandaDladla.github.io/globe.gl/Weather%20App/weather-timezone/)**
 
 ---
 
@@ -20,13 +20,13 @@ An interactive 3D globe built with [globe.gl](https://github.com/vasturiano/glob
 
 ## Usage
 
-Open `example/weather-timezone/index.html` in a browser (served from a local or remote HTTP server — file:// won't work due to CORS).
+Open `Weather App/weather-timezone/index.html` in a browser (served from a local or remote HTTP server — file:// won't work due to CORS).
 
 ### Quick local server
 
 ```bash
 npx serve .
-# then open http://localhost:3000/example/weather-timezone/
+# then open http://localhost:3000/Weather%20App/weather-timezone/
 ```
 
 ---
@@ -37,7 +37,7 @@ npx serve .
 globe/
   8k_earth_daymap.jpg       # Earth day texture
   8k_earth_nightmap.jpg     # Earth night texture
-example/
+Weather App/
   weather-timezone/
     index.html              # Main application
     style.css               # All styles
