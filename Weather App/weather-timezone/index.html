@@ -1551,6 +1551,35 @@
       searchCity();
     });
 
+    // ── Mobile: cap suggestions height to available space above keyboard ───────
+    // The Visual Viewport API reports the true visible area after the keyboard
+    // shrinks it. We recalculate how much vertical room sits above the search
+    // input and limit #suggestions to fit — preventing it from going off-screen.
+    function updateSuggestionsMaxHeight() {
+      const vvh = window.visualViewport
+        ? window.visualViewport.height
+        : window.innerHeight;
+      const rect = searchInput.getBoundingClientRect();
+      // On mobile the panel is at the bottom; suggestions open upward from the
+      // top of the input row. Available space = distance from top of viewport
+      // to top of search input, minus a small breathing gap (8px).
+      const available = rect.top - 8;
+      if (available > 0 && available < 260) {
+        // Only override when the keyboard is constraining the space
+        suggestionsEl.style.maxHeight = `${Math.max(available, 80)}px`;
+      } else {
+        suggestionsEl.style.maxHeight = ""; // let CSS default (240px) apply
+      }
+    }
+
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener(
+        "resize",
+        updateSuggestionsMaxHeight,
+      );
+    }
+    searchInput.addEventListener("focus", updateSuggestionsMaxHeight);
+
     // ── Init ───────────────────────────────────────────────────────────────────
     loadWeather("clouds_new");
 
