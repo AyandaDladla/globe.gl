@@ -1,9 +1,4 @@
-<<<<<<< HEAD
-﻿<<<<<<< HEAD:Weather App/weather-timezone/style.css
-=======
-<<<<<<< HEAD:Weather App/weather-timezone/style.css
->>>>>>> 20280ce37897eacf12c392d04e84054df63b080a
-/* ── Base ──────────────────────────────────────────────────────────────────── */
+/* ÔöÇÔöÇ Base ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ */
 body {
   margin: 0;
   background: #000;
@@ -11,7 +6,7 @@ body {
   touch-action: none; /* let globe.gl handle all touch gestures */
 }
 
-/* ── Controls panel ───────────────────────────────────────────────────────── */
+/* ÔöÇÔöÇ Controls panel ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ */
 #controls {
   position: absolute;
   top: 12px;
@@ -61,7 +56,7 @@ body {
   padding: 1px 4px;
 }
 
-/* ── Clock ────────────────────────────────────────────────────────────────── */
+/* ÔöÇÔöÇ Clock ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ */
 #clock {
   position: absolute;
   bottom: 12px;
@@ -75,7 +70,7 @@ body {
   touch-action: auto;
 }
 
-/* ── Country hover tooltip ────────────────────────────────────────────────── */
+/* ÔöÇÔöÇ Country hover tooltip ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ */
 #tooltip {
   position: fixed;
   display: none;
@@ -91,7 +86,7 @@ body {
   z-index: 999;
 }
 
-/* ── City clock labels ────────────────────────────────────────────────────── */
+/* ÔöÇÔöÇ City clock labels ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ */
 .city-label {
   background: rgba(0, 0, 0, 0.6);
   color: #fff;
@@ -109,7 +104,7 @@ body {
   opacity: 1;
 }
 
-/* ── Search-result pin (non-listed cities) ────────────────────────────────── */
+/* ÔöÇÔöÇ Search-result pin (non-listed cities) ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ */
 .search-pin {
   display: flex;
   flex-direction: column;
@@ -162,7 +157,7 @@ body {
   }
 }
 
-/* ── Search panel ─────────────────────────────────────────────────────────── */
+/* ÔöÇÔöÇ Search panel ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ */
 #search-panel {
   position: absolute;
   top: 12px;
@@ -193,7 +188,7 @@ body {
   border-radius: 6px;
   padding: 7px 10px;
   font-family: monospace;
-  font-size: 16px; /* ≥16px prevents iOS Safari from auto-zooming on focus */
+  font-size: 16px; /* ÔëÑ16px prevents iOS Safari from auto-zooming on focus */
   outline: none;
 }
 #search-input::placeholder {
@@ -217,7 +212,7 @@ body {
   background: rgba(80, 120, 220, 0.95);
 }
 
-/* ── Predictive suggestions dropdown ─────────────────────────────────────── */
+/* ÔöÇÔöÇ Predictive suggestions dropdown ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ */
 #suggestions {
   display: none;
   position: absolute;
@@ -251,13 +246,10 @@ body {
   color: #fff;
 }
 
-/* ── Weather card ─────────────────────────────────────────────────────────── */
+/* ÔöÇÔöÇ Weather card ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ */
 #weather-card {
   display: none;
-<<<<<<< HEAD
   position: relative;
-=======
->>>>>>> 20280ce37897eacf12c392d04e84054df63b080a
   margin-top: 8px;
   background: rgba(10, 10, 30, 0.88);
   border: 1px solid #444;
@@ -266,7 +258,6 @@ body {
   color: #eee;
   line-height: 1.8;
 }
-<<<<<<< HEAD
 #wc-close {
   position: absolute;
   top: 6px;
@@ -282,8 +273,6 @@ body {
 #wc-close:hover {
   color: #fff;
 }
-=======
->>>>>>> 20280ce37897eacf12c392d04e84054df63b080a
 #weather-card .wc-city {
   font-size: 15px;
   font-weight: bold;
@@ -305,7 +294,7 @@ body {
   color: #888;
 }
 
-/* ── 5-day forecast button ────────────────────────────────────────────────── */
+/* ÔöÇÔöÇ 5-day forecast button ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ */
 #forecast-btn {
   display: block;
   width: 100%;
@@ -325,7 +314,7 @@ body {
   color: #fff;
 }
 
-/* ── 5-day forecast panel ─────────────────────────────────────────────────── */
+/* ÔöÇÔöÇ 5-day forecast panel ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ */
 #forecast-panel {
   display: none;
   margin-top: 6px;
@@ -373,7 +362,7 @@ body {
   color: #8cf;
 }
 
-/* ── Weather error ────────────────────────────────────────────────────────── */
+/* ÔöÇÔöÇ Weather error ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ */
 #weather-error {
   display: none;
   margin-top: 6px;
@@ -382,7 +371,7 @@ body {
   padding-left: 2px;
 }
 
-/* ── Mobile (≤ 600px) ─────────────────────────────────────────────────────── */
+/* ÔöÇÔöÇ Mobile (Ôëñ 600px) ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ */
 @media (max-width: 600px) {
   /* Show the hamburger toggle */
   #controls-toggle {
@@ -468,7 +457,7 @@ body {
     -webkit-overflow-scrolling: touch;
   }
 
-  /* Clock: hide on mobile — search panel is at bottom, controls top-right;
+  /* Clock: hide on mobile ÔÇö search panel is at bottom, controls top-right;
      local time is already visible in the weather card */
   #clock {
     display: none;
@@ -485,722 +474,3 @@ body {
     display: none !important;
   }
 }
-=======
-<<<<<<< HEAD
-/* ── Base ──────────────────────────────────────────────────────────────────── */
-body {
-  margin: 0;
-  background: #000;
-  overflow: hidden;
-  touch-action: none; /* let globe.gl handle all touch gestures */
-}
-
-/* ── Controls panel ───────────────────────────────────────────────────────── */
-#controls {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  background: rgba(0, 0, 0, 0.75);
-  color: #ddd;
-  font-family: monospace;
-  font-size: 13px;
-  padding: 10px 14px;
-  border-radius: 8px;
-  line-height: 2;
-  user-select: none;
-  max-width: calc(100vw - 24px);
-  box-sizing: border-box;
-  touch-action: auto; /* allow browser to handle pinch/scroll on the panel */
-}
-#controls-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-}
-#controls-toggle {
-  display: none; /* shown only on mobile via media query */
-  background: none;
-  border: none;
-  color: #aaa;
-  font-size: 18px;
-  cursor: pointer;
-  padding: 0 2px;
-  line-height: 1;
-}
-#controls-body {
-  /* visible by default on desktop */
-}
-#controls.collapsed #controls-body {
-  display: none;
-}
-#controls label {
-  cursor: pointer;
-}
-#controls select {
-  background: #222;
-  color: #ddd;
-  border: 1px solid #555;
-  border-radius: 4px;
-  padding: 1px 4px;
-}
-
-/* ── Clock ────────────────────────────────────────────────────────────────── */
-#clock {
-  position: absolute;
-  bottom: 12px;
-  left: 12px;
-  background: rgba(0, 0, 0, 0.65);
-  color: lightblue;
-  font-family: monospace;
-  font-size: 13px;
-  padding: 8px 14px;
-  border-radius: 8px;
-  touch-action: auto;
-}
-
-/* ── Country hover tooltip ────────────────────────────────────────────────── */
-#tooltip {
-  position: fixed;
-  display: none;
-  background: rgba(10, 10, 30, 0.9);
-  color: #eee;
-  font-family: monospace;
-  font-size: 12px;
-  padding: 8px 12px;
-  border-radius: 6px;
-  pointer-events: none;
-  border: 1px solid #444;
-  line-height: 1.6;
-  z-index: 999;
-}
-
-/* ── City clock labels ────────────────────────────────────────────────────── */
-.city-label {
-  background: rgba(0, 0, 0, 0.6);
-  color: #fff;
-  font-family: monospace;
-  font-size: 11px;
-  padding: 2px 5px;
-  border-radius: 3px;
-  white-space: nowrap;
-  pointer-events: none;
-}
-
-/* ── Search-result pin (non-listed cities) ────────────────────────────────── */
-.search-pin {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  pointer-events: none;
-}
-.search-pin-dot {
-  width: 11px;
-  height: 11px;
-  background: #ff5f5f;
-  border-radius: 50%;
-  box-shadow:
-    0 0 0 3px rgba(255, 95, 95, 0.35),
-    0 0 10px 4px rgba(255, 95, 95, 0.5);
-  animation: pinPulse 1.6s ease-in-out infinite;
-}
-@keyframes pinPulse {
-  0%,
-  100% {
-    box-shadow:
-      0 0 0 3px rgba(255, 95, 95, 0.35),
-      0 0 10px 4px rgba(255, 95, 95, 0.5);
-  }
-  50% {
-    box-shadow:
-      0 0 0 6px rgba(255, 95, 95, 0.15),
-      0 0 18px 8px rgba(255, 95, 95, 0.3);
-  }
-}
-.search-pin-label {
-  background: rgba(0, 0, 0, 0.72);
-  color: #ffe0e0;
-  font-family: monospace;
-  font-size: 11px;
-  padding: 2px 6px;
-  border-radius: 3px;
-  margin-top: 4px;
-  white-space: nowrap;
-  animation: pinLabelFade 5s forwards;
-}
-@keyframes pinLabelFade {
-  0% {
-    opacity: 1;
-  }
-  65% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
-}
-
-/* ── Search panel ─────────────────────────────────────────────────────────── */
-#search-panel {
-  position: absolute;
-  top: 12px;
-  left: 12px;
-  width: 260px;
-  max-width: calc(100vw - 24px);
-  font-family: monospace;
-  font-size: 13px;
-  z-index: 100;
-  box-sizing: border-box;
-  touch-action: auto; /* allow browser to handle pinch/scroll on the panel */
-}
-
-#search-input-wrap {
-  position: relative;
-}
-
-#search-row {
-  display: flex;
-  gap: 6px;
-}
-
-#search-input {
-  flex: 1;
-  background: rgba(0, 0, 0, 0.75);
-  color: #eee;
-  border: 1px solid #555;
-  border-radius: 6px;
-  padding: 7px 10px;
-  font-family: monospace;
-  font-size: 16px; /* ≥16px prevents iOS Safari from auto-zooming on focus */
-  outline: none;
-}
-#search-input::placeholder {
-  color: #777;
-}
-#search-input:focus {
-  border-color: #88aaff;
-}
-
-#search-btn {
-  background: rgba(60, 90, 180, 0.85);
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  padding: 7px 12px;
-  cursor: pointer;
-  font-family: monospace;
-  font-size: 13px;
-}
-#search-btn:hover {
-  background: rgba(80, 120, 220, 0.95);
-}
-
-/* ── Predictive suggestions dropdown ─────────────────────────────────────── */
-#suggestions {
-  display: none;
-  position: absolute;
-  top: 100%;
-  left: 0;
-  width: 100%;
-  background: rgba(10, 10, 30, 0.97);
-  border: 1px solid #444;
-  border-top: none;
-  border-radius: 0 0 6px 6px;
-  overflow: hidden;
-  z-index: 200;
-  box-sizing: border-box;
-}
-.suggestion-item {
-  padding: 7px 10px;
-  cursor: pointer;
-  color: #ccc;
-  font-size: 12px;
-  border-bottom: 1px solid #1e1e2e;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.suggestion-item:last-child {
-  border-bottom: none;
-}
-.suggestion-item:hover,
-.suggestion-item.active {
-  background: rgba(80, 120, 220, 0.4);
-  color: #fff;
-}
-
-/* ── Weather card ─────────────────────────────────────────────────────────── */
-#weather-card {
-  display: none;
-  margin-top: 8px;
-  background: rgba(10, 10, 30, 0.88);
-  border: 1px solid #444;
-  border-radius: 8px;
-  padding: 12px 14px;
-  color: #eee;
-  line-height: 1.8;
-}
-#weather-card .wc-city {
-  font-size: 15px;
-  font-weight: bold;
-  color: #acd;
-  margin-bottom: 4px;
-}
-#weather-card .wc-desc {
-  color: #aaa;
-  text-transform: capitalize;
-  margin-bottom: 6px;
-}
-#weather-card .wc-row {
-  display: flex;
-  justify-content: space-between;
-  color: #ccc;
-  font-size: 12px;
-}
-#weather-card .wc-label {
-  color: #888;
-}
-
-/* ── Weather error ────────────────────────────────────────────────────────── */
-#weather-error {
-  display: none;
-  margin-top: 6px;
-  color: #f88;
-  font-size: 12px;
-  padding-left: 2px;
-}
-
-/* ── Mobile (≤ 600px) ─────────────────────────────────────────────────────── */
-@media (max-width: 600px) {
-  /* Show the hamburger toggle */
-  #controls-toggle {
-    display: inline-block;
-  }
-
-  /* Controls: start collapsed on mobile */
-  #controls {
-    top: 8px;
-    right: 8px;
-    padding: 8px 12px;
-    font-size: 12px;
-    line-height: 1.8;
-  }
-  #controls.collapsed #controls-body {
-    display: none;
-  }
-
-  /* Bigger touch targets for checkboxes and selects */
-  #controls input[type="checkbox"] {
-    width: 18px;
-    height: 18px;
-    vertical-align: middle;
-  }
-  #controls select {
-    font-size: 13px;
-    padding: 4px 6px;
-  }
-
-  /* Search panel: full width minus gutters */
-  #search-panel {
-    top: 8px;
-    left: 8px;
-    width: calc(100vw - 110px); /* leave room for controls in top-right */
-  }
-
-  /* Bigger search input and button for touch */
-  #search-input {
-    padding: 9px 10px;
-  }
-  #search-btn {
-    font-size: 14px;
-    padding: 9px 14px;
-    min-width: 44px;
-  }
-
-  /* Weather card: cap height and scroll if needed */
-  #weather-card {
-    max-height: 40vh;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  /* Clock: move to bottom-right on mobile to avoid conflict with search */
-  #clock {
-    bottom: 8px;
-    left: auto;
-    right: 8px;
-    font-size: 12px;
-    padding: 6px 10px;
-  }
-
-  /* Suggestion items: larger tap target */
-  .suggestion-item {
-    padding: 11px 10px;
-    font-size: 13px;
-  }
-
-  /* Hide country tooltip on touch (no hover) */
-  #tooltip {
-    display: none !important;
-  }
-}
-=======
-/* ── Base ──────────────────────────────────────────────────────────────────── */
-body {
-  margin: 0;
-  background: #000;
-  overflow: hidden;
-  touch-action: none; /* let globe.gl handle all touch gestures */
-}
-
-/* ── Controls panel ───────────────────────────────────────────────────────── */
-#controls {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  background: rgba(0, 0, 0, 0.75);
-  color: #ddd;
-  font-family: monospace;
-  font-size: 13px;
-  padding: 10px 14px;
-  border-radius: 8px;
-  line-height: 2;
-  user-select: none;
-  max-width: calc(100vw - 24px);
-  box-sizing: border-box;
-  touch-action: auto; /* allow browser to handle pinch/scroll on the panel */
-}
-#controls-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-}
-#controls-toggle {
-  display: none; /* shown only on mobile via media query */
-  background: none;
-  border: none;
-  color: #aaa;
-  font-size: 18px;
-  cursor: pointer;
-  padding: 0 2px;
-  line-height: 1;
-}
-#controls-body {
-  /* visible by default on desktop */
-}
-#controls.collapsed #controls-body {
-  display: none;
-}
-#controls label {
-  cursor: pointer;
-}
-#controls select {
-  background: #222;
-  color: #ddd;
-  border: 1px solid #555;
-  border-radius: 4px;
-  padding: 1px 4px;
-}
-
-/* ── Clock ────────────────────────────────────────────────────────────────── */
-#clock {
-  position: absolute;
-  bottom: 12px;
-  left: 12px;
-  background: rgba(0, 0, 0, 0.65);
-  color: lightblue;
-  font-family: monospace;
-  font-size: 13px;
-  padding: 8px 14px;
-  border-radius: 8px;
-  touch-action: auto;
-}
-
-/* ── Country hover tooltip ────────────────────────────────────────────────── */
-#tooltip {
-  position: fixed;
-  display: none;
-  background: rgba(10, 10, 30, 0.9);
-  color: #eee;
-  font-family: monospace;
-  font-size: 12px;
-  padding: 8px 12px;
-  border-radius: 6px;
-  pointer-events: none;
-  border: 1px solid #444;
-  line-height: 1.6;
-  z-index: 999;
-}
-
-/* ── City clock labels ────────────────────────────────────────────────────── */
-.city-label {
-  background: rgba(0, 0, 0, 0.6);
-  color: #fff;
-  font-family: monospace;
-  font-size: 11px;
-  padding: 2px 5px;
-  border-radius: 3px;
-  white-space: nowrap;
-  pointer-events: none;
-}
-
-/* ── Search-result pin (non-listed cities) ────────────────────────────────── */
-.search-pin {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  pointer-events: none;
-}
-.search-pin-dot {
-  width: 11px;
-  height: 11px;
-  background: #ff5f5f;
-  border-radius: 50%;
-  box-shadow:
-    0 0 0 3px rgba(255, 95, 95, 0.35),
-    0 0 10px 4px rgba(255, 95, 95, 0.5);
-  animation: pinPulse 1.6s ease-in-out infinite;
-}
-@keyframes pinPulse {
-  0%,
-  100% {
-    box-shadow:
-      0 0 0 3px rgba(255, 95, 95, 0.35),
-      0 0 10px 4px rgba(255, 95, 95, 0.5);
-  }
-  50% {
-    box-shadow:
-      0 0 0 6px rgba(255, 95, 95, 0.15),
-      0 0 18px 8px rgba(255, 95, 95, 0.3);
-  }
-}
-.search-pin-label {
-  background: rgba(0, 0, 0, 0.72);
-  color: #ffe0e0;
-  font-family: monospace;
-  font-size: 11px;
-  padding: 2px 6px;
-  border-radius: 3px;
-  margin-top: 4px;
-  white-space: nowrap;
-  animation: pinLabelFade 5s forwards;
-}
-@keyframes pinLabelFade {
-  0% {
-    opacity: 1;
-  }
-  65% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
-}
-
-/* ── Search panel ─────────────────────────────────────────────────────────── */
-#search-panel {
-  position: absolute;
-  top: 12px;
-  left: 12px;
-  width: 260px;
-  max-width: calc(100vw - 24px);
-  font-family: monospace;
-  font-size: 13px;
-  z-index: 100;
-  box-sizing: border-box;
-  touch-action: auto; /* allow browser to handle pinch/scroll on the panel */
-}
-
-#search-input-wrap {
-  position: relative;
-}
-
-#search-row {
-  display: flex;
-  gap: 6px;
-}
-
-#search-input {
-  flex: 1;
-  background: rgba(0, 0, 0, 0.75);
-  color: #eee;
-  border: 1px solid #555;
-  border-radius: 6px;
-  padding: 7px 10px;
-  font-family: monospace;
-  font-size: 16px; /* ≥16px prevents iOS Safari from auto-zooming on focus */
-  outline: none;
-}
-#search-input::placeholder {
-  color: #777;
-}
-#search-input:focus {
-  border-color: #88aaff;
-}
-
-#search-btn {
-  background: rgba(60, 90, 180, 0.85);
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  padding: 7px 12px;
-  cursor: pointer;
-  font-family: monospace;
-  font-size: 13px;
-}
-#search-btn:hover {
-  background: rgba(80, 120, 220, 0.95);
-}
-
-/* ── Predictive suggestions dropdown ─────────────────────────────────────── */
-#suggestions {
-  display: none;
-  position: absolute;
-  top: 100%;
-  left: 0;
-  width: 100%;
-  background: rgba(10, 10, 30, 0.97);
-  border: 1px solid #444;
-  border-top: none;
-  border-radius: 0 0 6px 6px;
-  overflow: hidden;
-  z-index: 200;
-  box-sizing: border-box;
-}
-.suggestion-item {
-  padding: 7px 10px;
-  cursor: pointer;
-  color: #ccc;
-  font-size: 12px;
-  border-bottom: 1px solid #1e1e2e;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.suggestion-item:last-child {
-  border-bottom: none;
-}
-.suggestion-item:hover,
-.suggestion-item.active {
-  background: rgba(80, 120, 220, 0.4);
-  color: #fff;
-}
-
-/* ── Weather card ─────────────────────────────────────────────────────────── */
-#weather-card {
-  display: none;
-  margin-top: 8px;
-  background: rgba(10, 10, 30, 0.88);
-  border: 1px solid #444;
-  border-radius: 8px;
-  padding: 12px 14px;
-  color: #eee;
-  line-height: 1.8;
-}
-#weather-card .wc-city {
-  font-size: 15px;
-  font-weight: bold;
-  color: #acd;
-  margin-bottom: 4px;
-}
-#weather-card .wc-desc {
-  color: #aaa;
-  text-transform: capitalize;
-  margin-bottom: 6px;
-}
-#weather-card .wc-row {
-  display: flex;
-  justify-content: space-between;
-  color: #ccc;
-  font-size: 12px;
-}
-#weather-card .wc-label {
-  color: #888;
-}
-
-/* ── Weather error ────────────────────────────────────────────────────────── */
-#weather-error {
-  display: none;
-  margin-top: 6px;
-  color: #f88;
-  font-size: 12px;
-  padding-left: 2px;
-}
-
-/* ── Mobile (≤ 600px) ─────────────────────────────────────────────────────── */
-@media (max-width: 600px) {
-  /* Show the hamburger toggle */
-  #controls-toggle {
-    display: inline-block;
-  }
-
-  /* Controls: start collapsed on mobile */
-  #controls {
-    top: 8px;
-    right: 8px;
-    padding: 8px 12px;
-    font-size: 12px;
-    line-height: 1.8;
-  }
-  #controls.collapsed #controls-body {
-    display: none;
-  }
-
-  /* Bigger touch targets for checkboxes and selects */
-  #controls input[type="checkbox"] {
-    width: 18px;
-    height: 18px;
-    vertical-align: middle;
-  }
-  #controls select {
-    font-size: 13px;
-    padding: 4px 6px;
-  }
-
-  /* Search panel: full width minus gutters */
-  #search-panel {
-    top: 8px;
-    left: 8px;
-    width: calc(100vw - 110px); /* leave room for controls in top-right */
-  }
-
-  /* Bigger search input and button for touch */
-  #search-input {
-    padding: 9px 10px;
-  }
-  #search-btn {
-    font-size: 14px;
-    padding: 9px 14px;
-    min-width: 44px;
-  }
-
-  /* Weather card: cap height and scroll if needed */
-  #weather-card {
-    max-height: 40vh;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  /* Clock: move to bottom-right on mobile to avoid conflict with search */
-  #clock {
-    bottom: 8px;
-    left: auto;
-    right: 8px;
-    font-size: 12px;
-    padding: 6px 10px;
-  }
-
-  /* Suggestion items: larger tap target */
-  .suggestion-item {
-    padding: 11px 10px;
-    font-size: 13px;
-  }
-
-  /* Hide country tooltip on touch (no hover) */
-  #tooltip {
-    display: none !important;
-  }
-}
->>>>>>> 20280ce37897eacf12c392d04e84054df63b080a
->>>>>>> 16335adba5a4b44498dbedb50346744bdd36b6b7:example/weather-timezone/style.css
