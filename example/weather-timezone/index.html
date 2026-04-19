@@ -1,5 +1,9 @@
 <head>
   <meta charset="utf-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
+  />
   <link rel="stylesheet" href="style.css" />
   <script src="//cdn.jsdelivr.net/npm/globe.gl"></script>
 </head>
@@ -8,34 +12,40 @@
   <div id="globeViz"></div>
 
   <div id="controls">
-    <div><strong>Weather / Timezone Globe</strong></div>
-    <div>
-      <label
-        ><input type="checkbox" id="togWeather" checked /> Weather
-        overlay</label
-      >
+    <div id="controls-header">
+      <strong>Weather / Timezone Globe</strong>
+      <button id="controls-toggle" aria-label="Toggle controls">☰</button>
     </div>
-    <div>
-      <label
-        ><input type="checkbox" id="togCountries" checked /> Country
-        borders</label
-      >
+    <div id="controls-body">
+      <div>
+        <label
+          ><input type="checkbox" id="togWeather" checked /> Weather
+          overlay</label
+        >
+      </div>
+      <div>
+        <label
+          ><input type="checkbox" id="togCountries" checked /> Country
+          borders</label
+        >
+      </div>
+      <div>
+        <label
+          ><input type="checkbox" id="togCities" checked /> City clocks</label
+        >
+      </div>
+      <div>
+        Layer:
+        <select id="weatherLayer">
+          <option value="clouds_new">Clouds</option>
+          <option value="precipitation_new">Precipitation</option>
+          <option value="temp_new">Temperature</option>
+          <option value="wind_new">Wind</option>
+          <option value="pressure_new">Pressure</option>
+        </select>
+      </div>
     </div>
-    <div>
-      <label
-        ><input type="checkbox" id="togCities" checked /> City clocks</label
-      >
-    </div>
-    <div>
-      Layer:
-      <select id="weatherLayer">
-        <option value="clouds_new">Clouds</option>
-        <option value="precipitation_new">Precipitation</option>
-        <option value="temp_new">Temperature</option>
-        <option value="wind_new">Wind</option>
-        <option value="pressure_new">Pressure</option>
-      </select>
-    </div>
+    <!-- /controls-body -->
   </div>
 
   <div id="search-panel">
@@ -430,6 +440,15 @@
     });
 
     // ── Layer controls ─────────────────────────────────────────────────────────
+    document.getElementById("controls-toggle").addEventListener("click", () => {
+      document.getElementById("controls").classList.toggle("collapsed");
+    });
+
+    // Collapse controls by default on small screens
+    if (window.innerWidth <= 600) {
+      document.getElementById("controls").classList.add("collapsed");
+    }
+
     document.getElementById("togWeather").addEventListener("change", (e) => {
       if (!weatherMesh) return;
       e.target.checked
@@ -538,27 +557,39 @@
     }
 
     // ── Click-to-weather ───────────────────────────────────────────────────────
-    world.onGlobeClick(async ({ lat, lng }) => {
-      weatherCard.style.display = "none";
-      weatherErr.style.display = "none";
-
-      try {
-        const res = await fetch(
-          `https://api.openweathermap.org/data/2.5/weather?lat=${lat.toFixed(4)}&lon=${lng.toFixed(4)}&appid=${OWM_KEY}&units=metric`,
-        );
-        const data = await res.json();
-
-        if (!res.ok) {
-          weatherErr.textContent = data.message || "No data for this location.";
-          weatherErr.style.display = "block";
-          return;
-        }
-
-        showWeatherCard(data, false);
-      } catch {
-        weatherErr.textContent = "Network error — check connection.";
-        weatherErr.style.display = "block";
+    // Debounce: ignore the click if a second click follows within 300ms
+    // (that's a double-click / double-tap used for zoom — don't treat it as a lookup)
+    let clickTimer = null;
+    world.onGlobeClick(({ lat, lng }) => {
+      if (clickTimer) {
+        clearTimeout(clickTimer);
+        clickTimer = null;
+        return; // second tap of a double-tap — abort
       }
+      clickTimer = setTimeout(async () => {
+        clickTimer = null;
+        weatherCard.style.display = "none";
+        weatherErr.style.display = "none";
+
+        try {
+          const res = await fetch(
+            `https://api.openweathermap.org/data/2.5/weather?lat=${lat.toFixed(4)}&lon=${lng.toFixed(4)}&appid=${OWM_KEY}&units=metric`,
+          );
+          const data = await res.json();
+
+          if (!res.ok) {
+            weatherErr.textContent =
+              data.message || "No data for this location.";
+            weatherErr.style.display = "block";
+            return;
+          }
+
+          showWeatherCard(data, false);
+        } catch {
+          weatherErr.textContent = "Network error — check connection.";
+          weatherErr.style.display = "block";
+        }
+      }, 300);
     });
 
     searchBtn.addEventListener("click", searchCity);
