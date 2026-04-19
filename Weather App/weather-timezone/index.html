@@ -986,9 +986,569 @@
     }
     world.onGlobeClick(({ lat, lng }) => handleMapTap(lat, lng));
 
-    searchBtn.addEventListener("click", searchCity);
+    // ── Predictive suggestions ─────────────────────────────────────────────────
+    const suggestionsEl = document.getElementById("suggestions");
+    let suggestionItems = []; // current geocoded results
+    let activeIdx = -1; // keyboard-highlighted index
+    let suggestDebounce = null;
+
+    function closeSuggestions() {
+      suggestionsEl.style.display = "none";
+      suggestionsEl.innerHTML = "";
+      suggestionItems = [];
+      activeIdx = -1;
+    }
+
+    function highlightItem(idx) {
+      const els = suggestionsEl.querySelectorAll(".suggestion-item");
+      els.forEach((el, i) => el.classList.toggle("active", i === idx));
+      activeIdx = idx;
+    }
+
+    function renderSuggestions(results) {
+      if (!results.length) {
+        closeSuggestions();
+        return;
+      }
+      suggestionItems = results;
+      activeIdx = -1;
+      suggestionsEl.innerHTML = results
+        .map((r, i) => {
+          const label = [r.name, r.state, r.country].filter(Boolean).join(", ");
+          return `<div class="suggestion-item" data-idx="${i}">${label}</div>`;
+        })
+        .join("");
+      suggestionsEl.style.display = "block";
+
+      suggestionsEl.querySelectorAll(".suggestion-item").forEach((el) => {
+        el.addEventListener("mousedown", (e) => {
+          // mousedown fires before blur — use it so the click registers
+          e.preventDefault();
+          const r = suggestionItems[parseInt(el.dataset.idx, 10)];
+          selectSuggestion(r);
+        });
+      });
+    }
+
+    function selectSuggestion(r) {
+      const label = [r.name, r.state, r.country].filter(Boolean).join(", ");
+      searchInput.value = label;
+      closeSuggestions();
+      // Fly and fetch using precise coords from geocoder
+      fetchWeatherAt(r.lat, r.lon);
+    }
+
+    // ── Country name → ISO-2 code map ─────────────────────────────────────────
+    // Full country names + common aliases + ISO-2 codes that don't conflict
+    // with the state/province abbreviations in STATE_NAMES below.
+    const COUNTRY_CODES = {
+      // full names & aliases
+      afghanistan: "AF",
+      albania: "AL",
+      algeria: "DZ",
+      angola: "AO",
+      argentina: "AR",
+      australia: "AU",
+      austria: "AT",
+      azerbaijan: "AZ",
+      bahrain: "BH",
+      bangladesh: "BD",
+      belarus: "BY",
+      belgium: "BE",
+      bolivia: "BO",
+      bosnia: "BA",
+      botswana: "BW",
+      brazil: "BR",
+      brasil: "BR",
+      bulgaria: "BG",
+      cambodia: "KH",
+      cameroon: "CM",
+      canada: "CA",
+      chile: "CL",
+      china: "CN",
+      colombia: "CO",
+      congo: "CG",
+      "costa rica": "CR",
+      croatia: "HR",
+      cuba: "CU",
+      "czech republic": "CZ",
+      czechia: "CZ",
+      denmark: "DK",
+      "dr congo": "CD",
+      drc: "CD",
+      ecuador: "EC",
+      egypt: "EG",
+      "el salvador": "SV",
+      ethiopia: "ET",
+      finland: "FI",
+      france: "FR",
+      germany: "DE",
+      ghana: "GH",
+      greece: "GR",
+      guatemala: "GT",
+      honduras: "HN",
+      hungary: "HU",
+      india: "IN",
+      indonesia: "ID",
+      iran: "IR",
+      iraq: "IQ",
+      ireland: "IE",
+      eire: "IE",
+      israel: "IL",
+      italy: "IT",
+      "ivory coast": "CI",
+      "côte d'ivoire": "CI",
+      jamaica: "JM",
+      japan: "JP",
+      jordan: "JO",
+      kazakhstan: "KZ",
+      kenya: "KE",
+      kuwait: "KW",
+      laos: "LA",
+      latvia: "LV",
+      lebanon: "LB",
+      libya: "LY",
+      lithuania: "LT",
+      luxembourg: "LU",
+      madagascar: "MG",
+      malaysia: "MY",
+      mali: "ML",
+      mexico: "MX",
+      méxico: "MX",
+      moldova: "MD",
+      mongolia: "MN",
+      morocco: "MA",
+      mozambique: "MZ",
+      myanmar: "MM",
+      burma: "MM",
+      namibia: "NA",
+      nepal: "NP",
+      netherlands: "NL",
+      holland: "NL",
+      "new zealand": "NZ",
+      nicaragua: "NI",
+      nigeria: "NG",
+      "north korea": "KP",
+      norway: "NO",
+      oman: "OM",
+      pakistan: "PK",
+      panama: "PA",
+      paraguay: "PY",
+      peru: "PE",
+      philippines: "PH",
+      poland: "PL",
+      portugal: "PT",
+      qatar: "QA",
+      romania: "RO",
+      russia: "RU",
+      rwanda: "RW",
+      "saudi arabia": "SA",
+      senegal: "SN",
+      serbia: "RS",
+      "sierra leone": "SL",
+      singapore: "SG",
+      slovakia: "SK",
+      somalia: "SO",
+      "south africa": "ZA",
+      "south korea": "KR",
+      spain: "ES",
+      "sri lanka": "LK",
+      sudan: "SD",
+      sweden: "SE",
+      switzerland: "CH",
+      syria: "SY",
+      taiwan: "TW",
+      tanzania: "TZ",
+      thailand: "TH",
+      tunisia: "TN",
+      turkey: "TR",
+      turkiye: "TR",
+      uganda: "UG",
+      ukraine: "UA",
+      "united arab emirates": "AE",
+      uae: "AE",
+      "united kingdom": "GB",
+      uk: "GB",
+      "great britain": "GB",
+      england: "GB",
+      scotland: "GB",
+      wales: "GB",
+      "united states": "US",
+      "united states of america": "US",
+      usa: "US",
+      us: "US",
+      america: "US",
+      uruguay: "UY",
+      uzbekistan: "UZ",
+      venezuela: "VE",
+      vietnam: "VN",
+      "viet nam": "VN",
+      yemen: "YE",
+      zambia: "ZM",
+      zimbabwe: "ZW",
+      // ISO-2 codes (only those that don't shadow US-state/province abbreviations)
+      ae: "AE",
+      af: "AF",
+      ao: "AO",
+      at: "AT",
+      au: "AU",
+      bd: "BD",
+      be: "BE",
+      bg: "BG",
+      bh: "BH",
+      bo: "BO",
+      br: "BR",
+      bw: "BW",
+      by: "BY",
+      cd: "CD",
+      cg: "CG",
+      ch: "CH",
+      ci: "CI",
+      cl: "CL",
+      cm: "CM",
+      cn: "CN",
+      cr: "CR",
+      cu: "CU",
+      cz: "CZ",
+      dk: "DK",
+      dz: "DZ",
+      eg: "EG",
+      et: "ET",
+      fi: "FI",
+      fr: "FR",
+      gb: "GB",
+      gh: "GH",
+      gr: "GR",
+      gt: "GT",
+      hn: "HN",
+      hr: "HR",
+      hu: "HU",
+      ie: "IE",
+      iq: "IQ",
+      ir: "IR",
+      it: "IT",
+      jm: "JM",
+      jo: "JO",
+      jp: "JP",
+      ke: "KE",
+      kh: "KH",
+      kp: "KP",
+      kr: "KR",
+      kw: "KW",
+      kz: "KZ",
+      lb: "LB",
+      lk: "LK",
+      lt: "LT",
+      lu: "LU",
+      lv: "LV",
+      ly: "LY",
+      mg: "MG",
+      ml: "ML",
+      mm: "MM",
+      mx: "MX",
+      my: "MY",
+      mz: "MZ",
+      na: "NA",
+      ng: "NG",
+      ni: "NI",
+      no: "NO",
+      np: "NP",
+      nz: "NZ",
+      om: "OM",
+      ph: "PH",
+      pk: "PK",
+      pl: "PL",
+      pt: "PT",
+      py: "PY",
+      qa: "QA",
+      ro: "RO",
+      rs: "RS",
+      ru: "RU",
+      rw: "RW",
+      sg: "SG",
+      sl: "SL",
+      sn: "SN",
+      so: "SO",
+      sv: "SV",
+      sy: "SY",
+      sz: "SZ",
+      th: "TH",
+      tj: "TJ",
+      tr: "TR",
+      tw: "TW",
+      tz: "TZ",
+      ua: "UA",
+      ug: "UG",
+      uy: "UY",
+      uz: "UZ",
+      ve: "VE",
+      vn: "VN",
+      ye: "YE",
+      za: "ZA",
+      zm: "ZM",
+      zw: "ZW",
+    };
+
+    // ── State/Province abbreviation → full name ─────────────────────────────
+    // Duplicate keys: last definition wins. ZA codes are listed first so US
+    // codes overwrite shared abbreviations (e.g. nc → "North Carolina" by default).
+    const STATE_NAMES = {
+      // South Africa provinces
+      kzn: "KwaZulu-Natal",
+      gp: "Gauteng",
+      wc: "Western Cape",
+      ec: "Eastern Cape",
+      nc: "Northern Cape",
+      nw: "North West",
+      fs: "Free State",
+      lp: "Limpopo",
+      mp: "Mpumalanga",
+      // United States (nc/wa etc. overwrite ZA defaults — see STATE_BY_COUNTRY for ZA)
+      al: "Alabama",
+      ak: "Alaska",
+      az: "Arizona",
+      ar: "Arkansas",
+      ca: "California",
+      co: "Colorado",
+      ct: "Connecticut",
+      de: "Delaware",
+      fl: "Florida",
+      ga: "Georgia",
+      hi: "Hawaii",
+      id: "Idaho",
+      il: "Illinois",
+      in: "Indiana",
+      ia: "Iowa",
+      ks: "Kansas",
+      ky: "Kentucky",
+      la: "Louisiana",
+      me: "Maine",
+      md: "Maryland",
+      ma: "Massachusetts",
+      mi: "Michigan",
+      mn: "Minnesota",
+      ms: "Mississippi",
+      mo: "Missouri",
+      mt: "Montana",
+      ne: "Nebraska",
+      nv: "Nevada",
+      nh: "New Hampshire",
+      nj: "New Jersey",
+      nm: "New Mexico",
+      ny: "New York",
+      nc: "North Carolina",
+      nd: "North Dakota",
+      oh: "Ohio",
+      ok: "Oklahoma",
+      or: "Oregon",
+      pa: "Pennsylvania",
+      ri: "Rhode Island",
+      sc: "South Carolina",
+      sd: "South Dakota",
+      tn: "Tennessee",
+      tx: "Texas",
+      ut: "Utah",
+      vt: "Vermont",
+      va: "Virginia",
+      wa: "Washington",
+      wv: "West Virginia",
+      wi: "Wisconsin",
+      wy: "Wyoming",
+      dc: "District of Columbia",
+      // Canada provinces/territories
+      on: "Ontario",
+      bc: "British Columbia",
+      ab: "Alberta",
+      qc: "Quebec",
+      mb: "Manitoba",
+      sk: "Saskatchewan",
+      ns: "Nova Scotia",
+      nb: "New Brunswick",
+      nl: "Newfoundland and Labrador",
+      pe: "Prince Edward Island",
+      yt: "Yukon",
+      nu: "Nunavut",
+      // Australia states/territories
+      nsw: "New South Wales",
+      vic: "Victoria",
+      qld: "Queensland",
+      sa: "South Australia",
+      tas: "Tasmania",
+      act: "Australian Capital Territory",
+      // India major states
+      mh: "Maharashtra",
+      dl: "Delhi",
+      ka: "Karnataka",
+      wb: "West Bengal",
+      rj: "Rajasthan",
+      up: "Uttar Pradesh",
+      gj: "Gujarat",
+      ap: "Andhra Pradesh",
+      ts: "Telangana",
+      pb: "Punjab",
+      hr: "Haryana",
+    };
+
+    // Country-specific overrides (checked before STATE_NAMES when country is known)
+    const STATE_BY_COUNTRY = {
+      ZA: { nc: "Northern Cape", nw: "North West" },
+      AU: {
+        wa: "Western Australia",
+        nt: "Northern Territory",
+        sa: "South Australia",
+      },
+      CA: { nt: "Northwest Territories" },
+    };
+
+    // Parse raw query into { city, cc, state } for Open-Meteo prefix search.
+    // Handles any token order, comma or space separated, full names or codes.
+    function parseForSearch(raw) {
+      function lookupCountry(t) {
+        return COUNTRY_CODES[t.toLowerCase()] || null;
+      }
+      function lookupState(t, cc) {
+        const lo = t.toLowerCase();
+        return (cc && STATE_BY_COUNTRY[cc]?.[lo]) || STATE_NAMES[lo] || null;
+      }
+
+      const parts = raw
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean);
+      if (parts.length >= 2) {
+        let cc = null,
+          ccIdx = -1;
+        for (let i = 0; i < parts.length; i++) {
+          const code = lookupCountry(parts[i]);
+          if (code) {
+            cc = code;
+            ccIdx = i;
+            break;
+          }
+        }
+        const withoutCC = parts.filter((_, i) => i !== ccIdx);
+        let state = null,
+          stateIdx = -1;
+        for (let i = 0; i < withoutCC.length; i++) {
+          const sn = lookupState(withoutCC[i], cc);
+          if (sn) {
+            state = sn;
+            stateIdx = i;
+            break;
+          }
+        }
+        const city =
+          withoutCC.filter((_, i) => i !== stateIdx).join(", ") || raw;
+        return { city, cc, state };
+      }
+
+      // Space-separated: try last then first N words as country/state
+      const words = raw.trim().split(/\s+/);
+      if (words.length >= 2) {
+        for (let n = 1; n <= Math.min(3, words.length - 1); n++) {
+          const tail = words.slice(-n).join(" ");
+          const head = words.slice(0, words.length - n).join(" ");
+          if (!head) continue;
+          const cc = lookupCountry(tail);
+          if (cc) return { city: head, cc, state: null };
+          const sn = lookupState(tail, null);
+          if (sn) return { city: head, cc: null, state: sn };
+        }
+        for (let n = 1; n <= Math.min(3, words.length - 1); n++) {
+          const head = words.slice(0, n).join(" ");
+          const tail = words.slice(n).join(" ");
+          if (!tail) continue;
+          const cc = lookupCountry(head);
+          if (cc) return { city: tail, cc, state: null };
+          const sn = lookupState(head, null);
+          if (sn) return { city: tail, cc: null, state: sn };
+        }
+      }
+      return { city: raw, cc: null, state: null };
+    }
+
+    // ── Open-Meteo geocoding — free, no key, true prefix matching, up to 15 results
+    async function fetchSuggestions(query) {
+      if (query.length < 2) {
+        closeSuggestions();
+        return;
+      }
+      try {
+        const { city, cc, state } = parseForSearch(query);
+        const res = await fetch(
+          `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(city)}&count=15&language=en&format=json`,
+        );
+        if (!res.ok) {
+          closeSuggestions();
+          return;
+        }
+        const data = await res.json();
+        let results = (data.results || []).map((r) => ({
+          name: r.name,
+          state: r.admin1 || "",
+          country: r.country_code || "",
+          lat: r.latitude,
+          lon: r.longitude,
+        }));
+        if (cc) results = results.filter((r) => r.country === cc);
+        if (state)
+          results = results.filter((r) =>
+            r.state.toLowerCase().includes(state.toLowerCase()),
+          );
+        renderSuggestions(results);
+      } catch {
+        closeSuggestions();
+      }
+    }
+
+    searchInput.addEventListener("input", () => {
+      clearTimeout(suggestDebounce);
+      const q = searchInput.value.trim();
+      if (!q) {
+        closeSuggestions();
+        return;
+      }
+      suggestDebounce = setTimeout(() => fetchSuggestions(q), 250);
+    });
+
     searchInput.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") searchCity();
+      const els = suggestionsEl.querySelectorAll(".suggestion-item");
+      if (els.length && (e.key === "ArrowDown" || e.key === "ArrowUp")) {
+        e.preventDefault();
+        const next =
+          e.key === "ArrowDown"
+            ? Math.min(activeIdx + 1, els.length - 1)
+            : Math.max(activeIdx - 1, 0);
+        highlightItem(next);
+        return;
+      }
+      if (e.key === "Enter") {
+        if (activeIdx >= 0 && suggestionItems[activeIdx]) {
+          selectSuggestion(suggestionItems[activeIdx]);
+        } else {
+          closeSuggestions();
+          searchCity();
+        }
+        return;
+      }
+      if (e.key === "Escape") {
+        closeSuggestions();
+        return;
+      }
+    });
+
+    searchInput.addEventListener("blur", () => {
+      // Small delay lets mousedown on a suggestion fire first
+      setTimeout(closeSuggestions, 150);
+    });
+
+    document.addEventListener("click", (e) => {
+      if (!e.target.closest("#search-input-wrap")) closeSuggestions();
+    });
+
+    searchBtn.addEventListener("click", () => {
+      closeSuggestions();
+      searchCity();
     });
 
     // ── Init ───────────────────────────────────────────────────────────────────
