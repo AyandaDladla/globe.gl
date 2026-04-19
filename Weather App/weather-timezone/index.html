@@ -641,13 +641,21 @@
       );
     }
 
+    // ── Purple dot pulse ───────────────────────────────────────────────────────
+    // Smoothly oscillate opacity between 0.35 and 0.95 using a sine wave.
+    let _dotOpacity = 0.9;
+    setInterval(() => {
+      _dotOpacity = 0.35 + 0.6 * (0.5 + 0.5 * Math.sin(Date.now() / 500));
+      world.pointColor(() => `rgba(110,0,180,${_dotOpacity.toFixed(2)})`);
+    }, 50);
+
     world
       .pointsData(CITIES)
       .pointLat((d) => d.lat)
       .pointLng((d) => d.lng)
       .pointAltitude(0.005)
       .pointRadius(0.25)
-      .pointColor(() => "rgba(180,80,255,0.9)")
+      .pointColor(() => `rgba(110,0,180,${_dotOpacity.toFixed(2)})`)
       .pointLabel(() => "") // suppress built-in tooltip; we use #tooltip
       .onPointHover((point) => {
         if (!point) {
