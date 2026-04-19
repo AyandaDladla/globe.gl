@@ -1,5 +1,9 @@
 <head>
   <meta charset="utf-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
+  />
   <link rel="stylesheet" href="style.css" />
   <script src="//cdn.jsdelivr.net/npm/globe.gl"></script>
 </head>
@@ -8,34 +12,40 @@
   <div id="globeViz"></div>
 
   <div id="controls">
-    <div><strong>Weather / Timezone Globe</strong></div>
-    <div>
-      <label
-        ><input type="checkbox" id="togWeather" checked /> Weather
-        overlay</label
-      >
+    <div id="controls-header">
+      <strong>Weather / Timezone Globe</strong>
+      <button id="controls-toggle" aria-label="Toggle controls">☰</button>
     </div>
-    <div>
-      <label
-        ><input type="checkbox" id="togCountries" checked /> Country
-        borders</label
-      >
+    <div id="controls-body">
+      <div>
+        <label
+          ><input type="checkbox" id="togWeather" checked /> Weather
+          overlay</label
+        >
+      </div>
+      <div>
+        <label
+          ><input type="checkbox" id="togCountries" checked /> Country
+          borders</label
+        >
+      </div>
+      <div>
+        <label
+          ><input type="checkbox" id="togCities" checked /> City clocks</label
+        >
+      </div>
+      <div>
+        Layer:
+        <select id="weatherLayer">
+          <option value="clouds_new">Clouds</option>
+          <option value="precipitation_new">Precipitation</option>
+          <option value="temp_new">Temperature</option>
+          <option value="wind_new">Wind</option>
+          <option value="pressure_new">Pressure</option>
+        </select>
+      </div>
     </div>
-    <div>
-      <label
-        ><input type="checkbox" id="togCities" checked /> City clocks</label
-      >
-    </div>
-    <div>
-      Layer:
-      <select id="weatherLayer">
-        <option value="clouds_new">Clouds</option>
-        <option value="precipitation_new">Precipitation</option>
-        <option value="temp_new">Temperature</option>
-        <option value="wind_new">Wind</option>
-        <option value="pressure_new">Pressure</option>
-      </select>
-    </div>
+    <!-- /controls-body -->
   </div>
 
   <div id="search-panel">
@@ -75,7 +85,7 @@
     </div>
   </div>
 
-  <div id="clock">UTC 00:00:00</div>
+  <div id="clock"></div>
   <div id="tooltip"></div>
 
   <script type="module">
@@ -307,13 +317,28 @@
           globeMat.uniforms.rotation.value.set(lng, lat),
         );
 
+      // Resolve the user's local IANA timezone once (falls back to UTC label)
+      const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      const localTzFmt = new Intl.DateTimeFormat("en-GB", {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: false,
+        timeZone: localTz,
+      });
+      // Derive a short UTC-offset label, e.g. "UTC+2" or "UTC-5"
+      const localOffsetMin = -new Date().getTimezoneOffset();
+      const localOffsetSign = localOffsetMin >= 0 ? "+" : "-";
+      const localOffsetAbs = Math.abs(localOffsetMin);
+      const localOffsetLabel =
+        localOffsetAbs % 60 === 0
+          ? `UTC${localOffsetSign}${localOffsetAbs / 60}`
+          : `UTC${localOffsetSign}${String(Math.floor(localOffsetAbs / 60)).padStart(2, "0")}:${String(localOffsetAbs % 60).padStart(2, "0")}`;
+
       (function animate() {
         dt = Date.now();
-        const now = new Date(dt);
-        const hh = String(now.getUTCHours()).padStart(2, "0");
-        const mm = String(now.getUTCMinutes()).padStart(2, "0");
-        const ss = String(now.getUTCSeconds()).padStart(2, "0");
-        clockEl.textContent = `UTC ${hh}:${mm}:${ss}`;
+        const timeStr = localTzFmt.format(new Date(dt));
+        clockEl.textContent = `${localOffsetLabel} ${timeStr}`;
         globeMat.uniforms.sunPos.value.set(...sunPosAt(dt));
         requestAnimationFrame(animate);
       })();
@@ -343,10 +368,10 @@
         countriesData = data.features;
         world
           .polygonsData(countriesData)
-          .polygonAltitude(0.001)
+          .polygonAltitude(0.004)
           .polygonCapColor(() => "rgba(0,0,0,0)")
-          .polygonSideColor(() => "rgba(255,255,255,0.04)")
-          .polygonStrokeColor(() => "rgba(180,180,255,0.5)")
+          .polygonSideColor(() => "rgba(50,120,220,0.7)")
+          .polygonStrokeColor(() => "rgba(50,120,220,0.7)")
           .onPolygonHover((polygon) => {
             if (!polygon) {
               tooltipEl.style.display = "none";
@@ -366,7 +391,10 @@
               `≈ UTC${sign}${utcOffset}<br>` +
               `~${hh}:${mm} local`;
             tooltipEl.style.display = "block";
-          });
+          })
+          .onPolygonClick((_polygon, _ev, { lat, lng }) =>
+            handleMapTap(lat, lng),
+          );
       });
 
     // ── HTML elements helper ───────────────────────────────────────────────────
@@ -430,6 +458,15 @@
     });
 
     // ── Layer controls ─────────────────────────────────────────────────────────
+    document.getElementById("controls-toggle").addEventListener("click", () => {
+      document.getElementById("controls").classList.toggle("collapsed");
+    });
+
+    // Collapse controls by default on small screens
+    if (window.innerWidth <= 600) {
+      document.getElementById("controls").classList.add("collapsed");
+    }
+
     document.getElementById("togWeather").addEventListener("change", (e) => {
       if (!weatherMesh) return;
       e.target.checked
@@ -537,29 +574,48 @@
       }
     }
 
-    // ── Click-to-weather ───────────────────────────────────────────────────────
-    world.onGlobeClick(async ({ lat, lng }) => {
-      weatherCard.style.display = "none";
-      weatherErr.style.display = "none";
-
-      try {
-        const res = await fetch(
-          `https://api.openweathermap.org/data/2.5/weather?lat=${lat.toFixed(4)}&lon=${lng.toFixed(4)}&appid=${OWM_KEY}&units=metric`,
-        );
-        const data = await res.json();
-
-        if (!res.ok) {
-          weatherErr.textContent = data.message || "No data for this location.";
-          weatherErr.style.display = "block";
-          return;
-        }
-
-        showWeatherCard(data, false);
-      } catch {
-        weatherErr.textContent = "Network error — check connection.";
-        weatherErr.style.display = "block";
+    // ── Double-click-to-weather ────────────────────────────────────────────────
+    // Fires only on the second tap within 450ms (double-click / double-tap).
+    // NOTE: onPolygonClick also forwards here because country polygon meshes sit
+    // slightly above the globe surface and intercept the raycaster over all land.
+    let clickTimer = null;
+    let firstTapCoords = null;
+    function handleMapTap(lat, lng) {
+      if (clickTimer) {
+        // Second tap — this is the double-click, proceed with lookup
+        clearTimeout(clickTimer);
+        clickTimer = null;
+        firstTapCoords = null;
+        weatherCard.style.display = "none";
+        weatherErr.style.display = "none";
+        (async () => {
+          try {
+            const res = await fetch(
+              `https://api.openweathermap.org/data/2.5/weather?lat=${lat.toFixed(4)}&lon=${lng.toFixed(4)}&appid=${OWM_KEY}&units=metric`,
+            );
+            const data = await res.json();
+            if (!res.ok) {
+              weatherErr.textContent =
+                data.message || "No data for this location.";
+              weatherErr.style.display = "block";
+              return;
+            }
+            showWeatherCard(data, true);
+          } catch {
+            weatherErr.textContent = "Network error — check connection.";
+            weatherErr.style.display = "block";
+          }
+        })();
+        return;
       }
-    });
+      // First tap — wait to see if a second tap follows
+      firstTapCoords = { lat, lng };
+      clickTimer = setTimeout(() => {
+        clickTimer = null;
+        firstTapCoords = null;
+      }, 450);
+    }
+    world.onGlobeClick(({ lat, lng }) => handleMapTap(lat, lng));
 
     searchBtn.addEventListener("click", searchCity);
     searchInput.addEventListener("keydown", (e) => {
