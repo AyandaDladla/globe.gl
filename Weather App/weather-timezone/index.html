@@ -62,6 +62,7 @@
     </div>
     <div id="weather-error"></div>
     <div id="weather-card">
+      <button id="wc-close" aria-label="Close">&times;</button>
       <div class="wc-city" id="wc-city"></div>
       <div class="wc-desc" id="wc-desc"></div>
       <div class="wc-row">
@@ -736,9 +737,10 @@
           return;
         }
         showWeatherCard(data, true);
-      } catch {
-        weatherErr.textContent = "Network error — check connection.";
+      } catch (err) {
+        weatherErr.textContent = `Network error — ${err.message || "check connection."}`;
         weatherErr.style.display = "block";
+        console.error("fetchWeatherAt failed:", err);
       }
     }
 
@@ -785,6 +787,12 @@
     const weatherErr = document.getElementById("weather-error");
     const forecastPanel = document.getElementById("forecast-panel");
     const forecastBtn = document.getElementById("forecast-btn");
+
+    document.getElementById("wc-close").addEventListener("click", () => {
+      weatherCard.style.display = "none";
+      weatherErr.style.display = "none";
+      hideForecast();
+    });
 
     // Track coords of the currently displayed city for the forecast fetch
     let currentCoords = null;
